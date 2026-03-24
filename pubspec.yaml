@@ -70,6 +70,13 @@ flutter:
     - assets/payments/
     - assets/images/
     - assets/homepage/
+    - assets/events/
+    - assets/gallery/
+
+  fonts:
+    - family: QwitcherGrypen
+      fonts:
+        - asset: assets/fonts/QwitcherGrypen-Regular.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

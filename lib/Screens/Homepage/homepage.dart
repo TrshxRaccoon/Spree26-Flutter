@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:spree/Widgets/event_card.dart';
+
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
@@ -108,6 +110,7 @@ class _HomepageState extends State<Homepage> {
             Center(
               child: Column(
                 children: [
+                  //SPREE LOGO
                   Stack(
                     alignment: Alignment.bottomRight,
                     children: [
@@ -115,13 +118,151 @@ class _HomepageState extends State<Homepage> {
                         'assets/homepage/spree_logo.png',
                         fit: BoxFit.cover,
                       ),
-                      Text(
-                        'Unleash the Untamed',
-                        style: TextStyle(
-                          color: Colors.white
+                      Padding(
+                        padding: EdgeInsetsGeometry.only(top: 10),
+                        child: Text(
+                          'Unleash the Untamed',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'QwitcherGrypen',
+                            fontSize: 34,
+                          ),
                         ),
-                      )
+                      ),
                     ],
+                  ),
+
+                  SizedBox(height: 24.h),
+
+                  //EVENTS TAB
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Discover Events",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            debugPrint('View All Clicked');
+                          },
+                          child: Text(
+                            "View All",
+                            style: TextStyle(
+                              color: Color(0xFFFF7A1A),
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  SizedBox(
+                    height: 228.h,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.only(left: 16.w),
+                      children: [
+                        EventCard(
+                          image: 'assets/events/battle_of_bands.png',
+                          category: 'CULTURAL',
+                          title: 'Battle of Bands',
+                          date: 'Oct 24, 2026',
+                        ),
+                        SizedBox(width: 16.h),
+                        EventCard(
+                          image: 'assets/events/cricket.png',
+                          category: 'SPORTS',
+                          title: 'Cricket',
+                          date: 'Oct 25, 2026',
+                        ),
+                        SizedBox(width: 16.h),
+                        EventCard(
+                          image: 'assets/events/fash_night.png',
+                          category: 'ENTERTAINMENT',
+                          title: 'Fashion Night',
+                          date: 'Oct 26, 2026',
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 24.h),
+
+                  //GALLERY TAB
+                  Align(
+                    alignment: AlignmentGeometry.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsGeometry.symmetric(
+                            horizontal: 16.w,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Gallery",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Memories from Spree \'25',
+                                style: TextStyle(
+                                  color: Color(0xFF64748B),
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        SizedBox(
+                          height: 128.h,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            padding: EdgeInsets.only(left: 16.w),
+                            children: [
+                              Image.asset(
+                                'assets/gallery/Image+Border+Shadow.png',
+                              ),
+                              SizedBox(width: 12.w),
+                              Image.asset(
+                                'assets/gallery/Image+Border+Shadow-1.png',
+                              ),
+                              SizedBox(width: 12.w),
+
+                              Image.asset(
+                                'assets/gallery/Image+Border+Shadow-2.png',
+                              ),
+                              SizedBox(width: 12.w),
+
+                              Image.asset(
+                                'assets/gallery/Image+Border+Shadow-3.png',
+                              ),
+                              SizedBox(width: 12.w),
+
+                              Image.asset(
+                                'assets/gallery/Image+Border+Shadow-4.png',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
