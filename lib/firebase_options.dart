@@ -87,4 +87,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'spree-26-flutter.firebasestorage.app',
     measurementId: 'G-F26GT59Q6S',
   );
+
 }

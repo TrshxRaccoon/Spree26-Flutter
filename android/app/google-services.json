@@ -29,6 +29,13 @@
             {
               "client_id": "388940608397-h225p8le1unol25msqu036eol2hhasf7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "388940608397-jm87rq9bslhmn1h9tdabusnt9d6bpmqc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.spree"
+              }
             }
           ]
         }

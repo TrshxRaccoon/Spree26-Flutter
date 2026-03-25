@@ -4,6 +4,7 @@ import 'package:spree/Payments/payment_failed.dart';
 import 'package:spree/Payments/payment_success.dart';
 import 'package:spree/Payments/payments_home.dart';
 import 'package:spree/Payments/transaction_history.dart';
+import 'package:spree/Screens/Sponsors/sponsors.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
 //import 'package:no_screenshot/no_screenshot.dart';
@@ -59,12 +60,7 @@ class MyApp extends StatelessWidget {
             colorScheme: .fromSeed(seedColor: Colors.deepPurple),
           ),
           //home: const MyHomePage(title: 'Flutter Demo Home Page'),
-          home: PaymentSuccess(
-            amount: "120",
-            vendorName: "Alex Smith",
-            date: "2 Feb",
-            time: "99:999 PM",
-          ),
+          home: Sponsors(),
         );
       },
     );
