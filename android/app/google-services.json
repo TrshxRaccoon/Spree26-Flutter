@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "388940608397-q8adggbakim6oj3qe3jb8i35hsf2ug62.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "club.devsoc.spree",
+            "certificate_hash": "cac071fd107fa92edf46e99d7ddbbde475664811"
+          }
+        },
+        {
           "client_id": "388940608397-h225p8le1unol25msqu036eol2hhasf7.apps.googleusercontent.com",
           "client_type": 3
         }
