@@ -20,7 +20,6 @@ class _ResetPinState extends State<ResetPin> {
   /// Step 1: Send OTP. Step 2: Enter OTP + new PIN.
   int _step = 1;
   bool _isLoading = false;
-  bool _resendCooldown = false;
 
   late FocusNode _otpFocus;
   late FocusNode _newPinFocus;
@@ -36,16 +35,19 @@ class _ResetPinState extends State<ResetPin> {
     _activeController = _otpController;
 
     _otpFocus.addListener(() {
-      if (_otpFocus.hasFocus)
+      if (_otpFocus.hasFocus) {
         setState(() => _activeController = _otpController);
+      }
     });
     _newPinFocus.addListener(() {
-      if (_newPinFocus.hasFocus)
+      if (_newPinFocus.hasFocus) {
         setState(() => _activeController = _newPinController);
+      }
     });
     _confirmPinFocus.addListener(() {
-      if (_confirmPinFocus.hasFocus)
+      if (_confirmPinFocus.hasFocus) {
         setState(() => _activeController = _confirmPinController);
+      }
     });
   }
 
@@ -65,15 +67,11 @@ class _ResetPinState extends State<ResetPin> {
     if (_isLoading) return;
     setState(() => _isLoading = true);
     try {
-      // await _services.requestOTP();
-      await Future.delayed(
-        const Duration(seconds: 2),
-      ); // Simulate network delay
+      await _services.requestOTP();
       if (!mounted) return;
       setState(() {
         _isLoading = false;
         _step = 2;
-        _resendCooldown = true;
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -82,10 +80,6 @@ class _ResetPinState extends State<ResetPin> {
           duration: Duration(seconds: 3),
         ),
       );
-      // Cooldown for resend (e.g. 60s)
-      Future.delayed(const Duration(seconds: 10), () {
-        if (mounted) setState(() => _resendCooldown = false);
-      });
     } catch (e) {
       if (!mounted) return;
       setState(() => _isLoading = false);
@@ -101,7 +95,7 @@ class _ResetPinState extends State<ResetPin> {
 
   /// Resend OTP (same endpoint as send).
   Future<void> _resendOTP() async {
-    if (_isLoading || _resendCooldown) return;
+    if (_isLoading) return;
     await _sendOTP();
   }
 
@@ -165,14 +159,10 @@ class _ResetPinState extends State<ResetPin> {
     if (_isLoading) return;
     setState(() => _isLoading = true);
     try {
-      // final ok = await _services.verifyOTP(
-      //   _otpController.text.trim(),
-      //   _newPinController.text,
-      // );
-      await Future.delayed(
-        const Duration(seconds: 2),
-      ); // Simulate network delay
-      final ok = true; // Simulate success response
+      final ok = await _services.verifyOTP(
+        _otpController.text.trim(),
+        _newPinController.text,
+      );
       if (!mounted) return;
       setState(() => _isLoading = false);
       if (ok) {
@@ -183,8 +173,6 @@ class _ResetPinState extends State<ResetPin> {
             duration: Duration(seconds: 2),
           ),
         );
-        await Future.delayed(const Duration(seconds: 1));
-        if (!mounted) return;
         Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -457,37 +445,27 @@ class _ResetPinState extends State<ResetPin> {
                     focusNode: _confirmPinFocus,
                     hint: 'CONFIRM PIN',
                   ),
-                  // Wrap in a fixed-height SizedBox to prevent layout jumping
                   SizedBox(
                     height: 48.h,
                     child: Center(
-                      child: _resendCooldown
-                          ? Text(
-                              'Resend OTP available in 60s',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: Colors.white54,
-                              ),
-                            )
-                          : TextButton(
-                              onPressed: _isLoading ? null : _resendOTP,
-                              style: TextButton.styleFrom(
-                                // Strip out excess default padding to keep it tight
-                                minimumSize: Size.zero,
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 8.h,
-                                  horizontal: 16.w,
-                                ),
-                              ),
-                              child: Text(
-                                'Resend OTP',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: const Color(0xFF2563EB),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
+                      child: TextButton(
+                        onPressed: _isLoading ? null : _resendOTP,
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 8.h,
+                            horizontal: 16.w,
+                          ),
+                        ),
+                        child: Text(
+                          'Resend OTP',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: const Color(0xFF2563EB),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(height: 16.h),

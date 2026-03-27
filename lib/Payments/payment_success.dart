@@ -7,12 +7,16 @@ class PaymentSuccess extends StatefulWidget {
   final String date;
   final String time;
 
+  /// When set (e.g. from [PaymentConfirmation]), used instead of a single [Navigator.pop].
+  final VoidCallback? onBackToHome;
+
   const PaymentSuccess({
     super.key,
     required this.amount,
     required this.vendorName,
     required this.date,
     required this.time,
+    this.onBackToHome,
   });
 
   @override
@@ -136,7 +140,11 @@ class _PaymentSuccessState extends State<PaymentSuccess> {
                 SizedBox(height: 50.h),
                 GestureDetector(
                   onTap: () {
-                    print('back to home');
+                    if (widget.onBackToHome != null) {
+                      widget.onBackToHome!();
+                    } else {
+                      Navigator.of(context).pop();
+                    }
                   },
                   child: Container(
                     height: 56.h,

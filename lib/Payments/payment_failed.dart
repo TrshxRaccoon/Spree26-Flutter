@@ -7,12 +7,21 @@ class PaymentFailed extends StatefulWidget {
   final String date;
   final String time;
 
+  /// Replaces the default grey explanation when non-null.
+  final String? failureDetail;
+
+  final VoidCallback? onRetry;
+  final VoidCallback? onBackToHome;
+
   const PaymentFailed({
     super.key,
     required this.amount,
     required this.vendorName,
     required this.date,
     required this.time,
+    this.failureDetail,
+    this.onRetry,
+    this.onBackToHome,
   });
 
   @override
@@ -47,7 +56,8 @@ class _PaymentFailedState extends State<PaymentFailed> {
               ),
               SizedBox(height: 20.h),
               Text(
-                'Something went wrong. Please try again\nor check your balance to ensure sufficient\nfunds.',
+                widget.failureDetail ??
+                    'Something went wrong. Please try again\nor check your balance to ensure sufficient\nfunds.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Inter',
@@ -90,7 +100,11 @@ class _PaymentFailedState extends State<PaymentFailed> {
               SizedBox(height: 50.h),
               GestureDetector(
                 onTap: () {
-                  print('retry');
+                  if (widget.onRetry != null) {
+                    widget.onRetry!();
+                  } else {
+                    Navigator.of(context).pop();
+                  }
                 },
                 child: Container(
                   height: 56.h,
@@ -123,7 +137,11 @@ class _PaymentFailedState extends State<PaymentFailed> {
               SizedBox(height: 20.h),
               GestureDetector(
                 onTap: () {
-                  print('back to home');
+                  if (widget.onBackToHome != null) {
+                    widget.onBackToHome!();
+                  } else {
+                    Navigator.of(context).pop();
+                  }
                 },
                 child: Container(
                   height: 56.h,

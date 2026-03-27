@@ -4,7 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spree/Services/payments.dart';
 
 class SetPin extends StatefulWidget {
-  const SetPin({super.key});
+  /// When non-null (e.g. from [PaymentsGate]), called after a successful API set-pin instead of [Navigator.pop].
+  final VoidCallback? onPinSetSuccess;
+
+  const SetPin({super.key, this.onPinSetSuccess});
 
   @override
   State<SetPin> createState() => _SetPinState();
@@ -114,8 +117,11 @@ class _SetPinState extends State<SetPin> {
             ),
           );
 
-          await Future.delayed(const Duration(seconds: 2));
-          Navigator.pop(context);
+          if (widget.onPinSetSuccess != null) {
+            widget.onPinSetSuccess!();
+          } else {
+            Navigator.pop(context);
+          }
         }
       } else {
         if (mounted) {
