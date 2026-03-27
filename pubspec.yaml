@@ -47,6 +47,9 @@ dependencies:
   permission_handler: ^11.3.1
   device_info_plus: ^12.1.0
   android_id: ^0.4.0
+  http: ^1.2.2
+  qr_code_scanner_plus: ^2.0.13
+  intl: ^0.20.2
 
 
 
