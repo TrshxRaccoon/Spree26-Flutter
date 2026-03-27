@@ -95,6 +95,10 @@ flutter:
     - family: Akira Expanded
       fonts:
         - asset: assets/fonts/AkiraExpanded.otf 
+
+    - family: Orbitron_Bold
+      fonts:
+        - asset: assets/fonts/Orbitron-Bold.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
