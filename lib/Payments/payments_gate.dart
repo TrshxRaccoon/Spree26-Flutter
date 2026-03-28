@@ -22,11 +22,15 @@ class _PaymentsGateState extends State<PaymentsGate> {
   }
 
   void _retryCheckPin() {
-    setState(() => _checkPinFuture = Services().checkPin());
+    setState(() {
+      _checkPinFuture = Services().checkPin();
+    });
   }
 
   void _onPinSetSuccess() {
-    setState(() => _checkPinFuture = Services().checkPin());
+    setState(() {
+      _checkPinFuture = Services().checkPin();
+    });
   }
 
   @override

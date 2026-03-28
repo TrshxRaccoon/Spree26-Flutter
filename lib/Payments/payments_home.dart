@@ -22,7 +22,9 @@ class _PaymentsHomeState extends State<PaymentsHome> {
   }
 
   Future<void> _reloadWallet() async {
-    setState(() => _walletFuture = Services().transactions());
+    setState(() {
+      _walletFuture = Services().transactions();
+    });
     try {
       await _walletFuture;
     } catch (_) {}

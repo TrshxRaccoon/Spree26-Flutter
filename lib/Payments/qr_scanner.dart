@@ -65,26 +65,23 @@ class _QrScannerScreenState extends State<QrScannerScreen>
     _scanSubscription?.cancel();
     _scanSubscription = null;
 
-    try {
-      controller?.pauseCamera();
-    } catch (_) {}
+    final c = controller;
+    if (c != null) {
+      unawaited(c.pauseCamera().catchError((_) {}));
+    }
     super.dispose();
   }
 
   void _safePauseCamera() {
-    try {
-      if (controller != null && !_isDisposed) {
-        controller!.pauseCamera();
-      }
-    } catch (_) {}
+    final c = controller;
+    if (c == null || _isDisposed) return;
+    unawaited(c.pauseCamera().catchError((_) {}));
   }
 
   void _safeResumeCamera() {
-    try {
-      if (controller != null && !_isDisposed) {
-        controller!.resumeCamera();
-      }
-    } catch (_) {}
+    final c = controller;
+    if (c == null || _isDisposed) return;
+    unawaited(c.resumeCamera().catchError((_) {}));
   }
 
   void _onQRViewCreated(QRViewController ctrl) {

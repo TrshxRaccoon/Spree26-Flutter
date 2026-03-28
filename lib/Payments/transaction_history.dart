@@ -22,7 +22,9 @@ class _TransactionHistoryState extends State<TransactionHistory> {
   }
 
   Future<void> _reload() async {
-    setState(() => _future = Services().transactions());
+    setState(() {
+      _future = Services().transactions();
+    });
     try {
       await _future;
     } catch (_) {}
