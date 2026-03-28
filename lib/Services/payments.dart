@@ -3,6 +3,7 @@
 import 'dart:io';
 // import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 // import 'package:waves24/constants/secrets.dart';
@@ -96,8 +97,9 @@ class Services {
     }
     try {
       String? token = await _storage.read(key: 'access_token');
-      // debugPrint('Token: $token');
+      debugPrint('Token: $token');
       // debugPrint('payment endpoint: $paymentapi');
+      debugPrint('access token: $token');
       final response = await http.get(
         Uri.parse('$paymentapi/student/has-pin'),
         headers: <String, String>{

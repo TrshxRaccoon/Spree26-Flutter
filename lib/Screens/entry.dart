@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:spree/Screens/Events/Events.dart';
 import 'package:spree/Screens/Homepage/homepage.dart';
 import 'package:spree/Screens/Login.dart';
 import 'package:spree/Payments/payments_home.dart';
-// import 'package:spree/Screens/gate_pass_screen.dart';
+import 'package:spree/Screens/placeholders/nav_placeholders.dart';
 import 'package:spree/Services/config.dart';
 
 class Entry extends StatefulWidget {
@@ -85,14 +84,18 @@ class _EntryState extends State<Entry> {
     final isGuest = _isGuest;
     final showEvents = Config().showEvents;
 
+    // Order must match bottom nav: Home → Events? → Payments? → Pass
     final pages = <Widget>[
       const Homepage(),
-      // if (showEvents) Events(),
-      if (!isGuest) PaymentsHome(),
-      // GatePassScreen(),
+      if (showEvents) const EventsPlaceholderPage(),
+      if (!isGuest) const PaymentsHome(),
+      const PassPlaceholderPage(),
     ];
 
     final pageCount = pages.length;
+    final passIndex = pageCount - 1;
+    final paymentsIndex =
+        !isGuest ? (showEvents ? 2 : 1) : null;
     final safeIndex = _currentIndex.clamp(0, pageCount - 1);
     if (safeIndex != _currentIndex && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -157,14 +160,17 @@ class _EntryState extends State<Entry> {
                 ),
               if (!isGuest)
                 GestureDetector(
-                  onTap: () => setState(() => _currentIndex = showEvents ? 2 : 1),
+                  onTap: () => setState(
+                    () => _currentIndex = paymentsIndex!,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
                         Icons.qr_code_2,
                         size: 24.r,
-                        color: (showEvents ? _currentIndex == 2 : _currentIndex == 1)
+                        color: paymentsIndex != null &&
+                                _currentIndex == paymentsIndex
                             ? Colors.white
                             : Colors.grey,
                       ),
@@ -173,7 +179,8 @@ class _EntryState extends State<Entry> {
                         'Payments',
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: (showEvents ? _currentIndex == 2 : _currentIndex == 1)
+                          color: paymentsIndex != null &&
+                                  _currentIndex == paymentsIndex
                               ? Colors.white
                               : Colors.grey,
                         ),
@@ -182,14 +189,14 @@ class _EntryState extends State<Entry> {
                   ),
                 ),
               GestureDetector(
-                onTap: () => setState(() => _currentIndex = pageCount - 1),
+                onTap: () => setState(() => _currentIndex = passIndex),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       Icons.fingerprint,
                       size: 24.r,
-                      color: _currentIndex == pageCount - 1
+                      color: _currentIndex == passIndex
                           ? Colors.white
                           : Colors.grey,
                     ),
@@ -198,7 +205,7 @@ class _EntryState extends State<Entry> {
                       'Pass',
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: _currentIndex == pageCount - 1
+                        color: _currentIndex == passIndex
                             ? Colors.white
                             : Colors.grey,
                       ),
