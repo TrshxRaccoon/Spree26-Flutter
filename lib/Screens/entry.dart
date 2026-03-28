@@ -67,13 +67,11 @@ class _EntryState extends State<Entry> {
     try {
       await widget.onLogout!.call();
       if (!mounted) return;
-      // Explicitly navigate to Login so iOS reliably shows login screen
-      final nav = Navigator.of(context, rootNavigator: true);
-      nav.pushAndRemoveUntil(
-        MaterialPageRoute(
+      // Replace [Entry] so the user cannot navigate back into the signed-in shell.
+      Navigator.of(context, rootNavigator: true).pushReplacement(
+        MaterialPageRoute<void>(
           builder: (_) => LoginScreen(onLogoutForEntry: widget.onLogout),
         ),
-        (route) => false,
       );
     } finally {
       if (mounted) setState(() => _isLoggingOut = false);

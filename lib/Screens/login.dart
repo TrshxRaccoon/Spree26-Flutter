@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -202,6 +203,44 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Future<bool> _onWillPop() async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: Colors.white,
+            title: Text(
+              'Exit App',
+              style: TextStyle(color: Colors.black, letterSpacing: 0.1.sp),
+            ),
+            content: Text(
+              'Are you sure you want to exit the app?',
+              style: TextStyle(color: Colors.black, fontSize: 14.sp),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  'No',
+                  style: TextStyle(color: Colors.black, fontSize: 14.sp),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(
+                  'Yes',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   Widget _buildAuthButton({
     Widget? iconWidget,
     required String text,
@@ -249,9 +288,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Container(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (!didPop) {
+          final shouldExit = await _onWillPop();
+          if (shouldExit) {
+            SystemNavigator.pop();
+          }
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
@@ -362,6 +411,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

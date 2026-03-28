@@ -21,6 +21,7 @@ class EnterPin extends StatefulWidget {
 
 class _EnterPinState extends State<EnterPin> {
   final TextEditingController _pinController = TextEditingController();
+  bool _swdConsent = false;
 
   @override
   void dispose() {
@@ -47,8 +48,26 @@ class _EnterPinState extends State<EnterPin> {
       return;
     }
 
+    if (!_swdConsent) {
+      final bottom = MediaQuery.of(context).viewInsets.bottom;
+      final snackBottom = bottom > 0 ? bottom - 10.h : 20.h;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Please confirm SWD dues consent to continue.',
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.redAccent,
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(bottom: snackBottom, left: 20.w, right: 20.w),
+        ),
+      );
+      return;
+    }
+
     FocusScope.of(context).unfocus();
-    Navigator.push<void>(
+    Navigator.pushReplacement(
       context,
       PageRouteBuilder<void>(
         pageBuilder: (context, animation1, animation2) => PaymentConfirmation(
@@ -116,6 +135,42 @@ class _EnterPinState extends State<EnterPin> {
                   borderSide: const BorderSide(color: Color(0xFF2563EB)),
                 ),
               ),
+            ),
+            SizedBox(height: 20.h),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: Checkbox(
+                    value: _swdConsent,
+                    onChanged: (v) {
+                      setState(() => _swdConsent = v ?? false);
+                    },
+                    activeColor: const Color(0xFF2563EB),
+                    side: const BorderSide(color: Color(0xFF64748B)),
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () =>
+                        setState(() => _swdConsent = !_swdConsent),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 2.h),
+                      child: Text(
+                        'I consent for the amount to be deducted from my SWD Dues',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 13.sp,
+                          height: 1.35,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 24.h),
             FilledButton(

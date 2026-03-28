@@ -108,8 +108,12 @@ class _PaymentConfirmationState extends State<PaymentConfirmation> {
 
   @override
   Widget build(BuildContext context) {
+    final allowSystemBack =
+        !_loading && _failureDetail != null;
+
+    Widget child;
     if (_loading) {
-      return Scaffold(
+      child = Scaffold(
         backgroundColor: Colors.black,
         body: Center(
           child: Column(
@@ -125,20 +129,18 @@ class _PaymentConfirmationState extends State<PaymentConfirmation> {
           ),
         ),
       );
-    }
-
-    if (_successDate != null && _successTime != null) {
-      return PaymentSuccess(
+    } else if (_successDate != null && _successTime != null) {
+      child = PaymentSuccess(
         amount: widget.amount,
         vendorName: widget.vendor,
         date: _successDate!,
         time: _successTime!,
         onBackToHome: _backToHome,
       );
-    }
-
-    if (_failureDate != null && _failureTime != null && _failureDetail != null) {
-      return PaymentFailed(
+    } else if (_failureDate != null &&
+        _failureTime != null &&
+        _failureDetail != null) {
+      child = PaymentFailed(
         amount: widget.amount,
         vendorName: widget.vendor,
         date: _failureDate!,
@@ -147,8 +149,13 @@ class _PaymentConfirmationState extends State<PaymentConfirmation> {
         onRetry: () => Navigator.of(context).pop(),
         onBackToHome: _backToHome,
       );
+    } else {
+      child = const SizedBox.shrink();
     }
 
-    return const SizedBox.shrink();
+    return PopScope(
+      canPop: allowSystemBack,
+      child: child,
+    );
   }
 }
