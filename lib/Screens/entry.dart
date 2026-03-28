@@ -5,7 +5,7 @@ import 'package:spree/Screens/Homepage/homepage.dart';
 import 'package:spree/Screens/Login.dart';
 import 'package:spree/Payments/payments_home.dart';
 import 'package:spree/Screens/Events/events_page.dart';
-import 'package:spree/Screens/placeholders/nav_placeholders.dart';
+import 'package:spree/Screens/gate_pass_screen.dart';
 import 'package:spree/Services/config.dart';
 
 class Entry extends StatefulWidget {
@@ -88,7 +88,7 @@ class _EntryState extends State<Entry> {
       const Homepage(),
       if (showEvents) const EventsPage(),
       if (!isGuest) const PaymentsHome(),
-      const PassPlaceholderPage(),
+      const GatePassScreen(),
     ];
 
     final pageCount = pages.length;
