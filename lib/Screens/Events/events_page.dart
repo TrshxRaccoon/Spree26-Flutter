@@ -2,10 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:spree/Screens/Events/event_webview_page.dart';
 
-/// Lists event games from Firestore `events` (`game`, `url`); opens `url` in an
-/// in-app browser (Chrome Custom Tabs on Android, SFSafariViewController on iOS).
+/// Lists event games from Firestore `events` (`game`, `url`); opens `url` in a [WebView].
 class EventsPage extends StatelessWidget {
   const EventsPage({super.key});
 
@@ -115,29 +114,15 @@ class EventsPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14.r),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(14.r),
-                  onTap: () async {
-                    final uri = Uri.parse(item.url);
-                    try {
-                      final ok = await launchUrl(
-                        uri,
-                        mode: LaunchMode.inAppBrowserView,
-                      );
-                      if (!ok && context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Could not open link'),
-                          ),
-                        );
-                      }
-                    } catch (_) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Could not open link'),
-                          ),
-                        );
-                      }
-                    }
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => EventWebViewPage(
+                          title: label,
+                          url: item.url,
+                        ),
+                      ),
+                    );
                   },
                   child: Container(
                     width: double.infinity,
