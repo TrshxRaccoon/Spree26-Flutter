@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,6 +10,7 @@ import 'dart:ui' as ui;
 import 'package:spree/Screens/Contact/contact_us.dart';
 import 'package:spree/Screens/Homepage/home_gallery.dart';
 import 'package:spree/Screens/Sponsors/sponsors.dart';
+import 'package:spree/Services/config.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -195,23 +198,24 @@ class _HomepageState extends State<Homepage> {
 
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _homeNavButton(
-                                label: 'Sponsors',
-                                icon: Icons.handshake_outlined,
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute<void>(
-                                      builder: (_) => const Sponsors(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
+                        child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                          stream: FirebaseFirestore.instanceFor(
+                            app: Firebase.app(),
+                            databaseId: 'spree-26',
+                          )
+                              .collection('config')
+                              .doc('api_config')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            // Use startup fetch until stream delivers (avoids flashing
+                            // Sponsors on then off when remote is false).
+                            bool showSponsors = Config().showSponsors;
+                            if (snapshot.hasData && snapshot.data!.exists) {
+                              final v = snapshot.data!.data()?['sponsors'];
+                              showSponsors = v is bool ? v : true;
+                            }
+
+                            final contactButton = Expanded(
                               child: _homeNavButton(
                                 label: 'Contact Us',
                                 icon: Icons.contact_mail_outlined,
@@ -223,8 +227,32 @@ class _HomepageState extends State<Homepage> {
                                   );
                                 },
                               ),
-                            ),
-                          ],
+                            );
+
+                            if (!showSponsors) {
+                              return Row(children: [contactButton]);
+                            }
+
+                            return Row(
+                              children: [
+                                Expanded(
+                                  child: _homeNavButton(
+                                    label: 'Sponsors',
+                                    icon: Icons.handshake_outlined,
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute<void>(
+                                          builder: (_) => const Sponsors(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(width: 12.w),
+                                contactButton,
+                              ],
+                            );
+                          },
                         ),
                       ),
 
