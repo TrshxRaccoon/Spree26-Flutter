@@ -257,7 +257,7 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
 
-                      if (!_isGuest) ...[
+                      
                         SizedBox(height: 12.h),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -279,7 +279,7 @@ class _HomepageState extends State<Homepage> {
                             ],
                           ),
                         ),
-                      ],
+                      
 
                       SizedBox(height: 24.h),
 
