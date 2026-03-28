@@ -50,6 +50,8 @@ dependencies:
   http: ^1.2.2
   qr_code_scanner_plus: ^2.0.13
   intl: ^0.20.2
+  cached_network_image: ^3.4.1
+  flutter_cache_manager: ^3.4.1
 
 
 

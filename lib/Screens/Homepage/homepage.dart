@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 
 import 'package:spree/Screens/Contact/contact_us.dart';
+import 'package:spree/Screens/Homepage/home_gallery.dart';
 import 'package:spree/Screens/Sponsors/sponsors.dart';
 
 class Homepage extends StatefulWidget {
@@ -229,82 +230,7 @@ class _HomepageState extends State<Homepage> {
 
                       SizedBox(height: 24.h),
 
-                      // GALLERY TAB
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16.w),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Gallery",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 22.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Memories from Spree '25",
-                                    style: TextStyle(
-                                      color: Color(0xFF64748B),
-                                      fontSize: 14.sp,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 8.h),
-                            SizedBox(
-                              height: 128.h,
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                padding: EdgeInsets.only(left: 16.w),
-                                children: [
-                                  SizedBox(
-                                    child: Image.asset(
-                                      'assets/gallery/Image+Border+Shadow.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  SizedBox(width: 12.w),
-                                  SizedBox(
-                                    child: Image.asset(
-                                      'assets/gallery/Image+Border+Shadow-1.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  SizedBox(width: 12.w),
-                                  SizedBox(
-                                    child: Image.asset(
-                                      'assets/gallery/Image+Border+Shadow-2.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  SizedBox(width: 12.w),
-                                  SizedBox(
-                                    child: Image.asset(
-                                      'assets/gallery/Image+Border+Shadow-3.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  SizedBox(width: 12.w),
-                                  SizedBox(
-                                    child: Image.asset(
-                                      'assets/gallery/Image+Border+Shadow-4.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      const HomeGallery(),
 
                       SizedBox(height: 24.h),
 
