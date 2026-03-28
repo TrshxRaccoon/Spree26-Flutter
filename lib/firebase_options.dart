@@ -17,17 +17,29 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -40,54 +52,14 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC3p0hqgnY-4jOQwNkwFiUwaeC1VPexvgk',
-    appId: '1:388940608397:web:d2c41c4c66c90e70f143c4',
-    messagingSenderId: '388940608397',
-    projectId: 'spree-26-flutter',
-    authDomain: 'spree-26-flutter.firebaseapp.com',
-    storageBucket: 'spree-26-flutter.firebasestorage.app',
-    measurementId: 'G-47LCN1J7YZ',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBd5H0xMC5UnLz-RunyZGHi0Y9sO31DkG4',
-    appId: '1:388940608397:android:24c559f1aa5cbdcff143c4',
-    messagingSenderId: '388940608397',
-    projectId: 'spree-26-flutter',
-    storageBucket: 'spree-26-flutter.firebasestorage.app',
-  );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAmdJY_H7e4bn1ENifrbNej3FuYkHIizZM',
-    appId: '1:388940608397:ios:d4ce9221f0f85aeef143c4',
+    appId: '1:388940608397:ios:1d5738e8fdbc67baf143c4',
     messagingSenderId: '388940608397',
     projectId: 'spree-26-flutter',
     storageBucket: 'spree-26-flutter.firebasestorage.app',
-    androidClientId: '388940608397-q8adggbakim6oj3qe3jb8i35hsf2ug62.apps.googleusercontent.com',
-    iosClientId: '388940608397-l6umqrm0a62ue15ujtrjb6e9f54ntidf.apps.googleusercontent.com',
-    iosBundleId: 'club.devsoc.spree26',
+    androidClientId: '388940608397-9t20frv41kdjsmq335o6j4mp3d40f6c4.apps.googleusercontent.com',
+    iosClientId: '388940608397-6ta15ktdjo9pcvlro6ucunh55js1nch6.apps.googleusercontent.com',
+    iosBundleId: 'club.devsoc.spree25',
   );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAmdJY_H7e4bn1ENifrbNej3FuYkHIizZM',
-    appId: '1:388940608397:ios:4ee8362b1989826ff143c4',
-    messagingSenderId: '388940608397',
-    projectId: 'spree-26-flutter',
-    storageBucket: 'spree-26-flutter.firebasestorage.app',
-    androidClientId: '388940608397-q8adggbakim6oj3qe3jb8i35hsf2ug62.apps.googleusercontent.com',
-    iosClientId: '388940608397-jm87rq9bslhmn1h9tdabusnt9d6bpmqc.apps.googleusercontent.com',
-    iosBundleId: 'com.example.spree',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyC3p0hqgnY-4jOQwNkwFiUwaeC1VPexvgk',
-    appId: '1:388940608397:web:39a16de0ed9a4891f143c4',
-    messagingSenderId: '388940608397',
-    projectId: 'spree-26-flutter',
-    authDomain: 'spree-26-flutter.firebaseapp.com',
-    storageBucket: 'spree-26-flutter.firebasestorage.app',
-    measurementId: 'G-F26GT59Q6S',
-  );
-
 }

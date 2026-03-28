@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "388940608397-9t20frv41kdjsmq335o6j4mp3d40f6c4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "club.devsoc.spree",
+            "certificate_hash": "48c666c1f17858f1903d04b9ef368ec1ed1a276f"
+          }
+        },
+        {
+          "client_id": "388940608397-mmh6c19t6gb9t91pmtea02flvtqbl1gg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "club.devsoc.spree",
+            "certificate_hash": "afac9b3f04e3764aa96ecc7a295dfab90a8ae9b7"
+          }
+        },
+        {
           "client_id": "388940608397-q8adggbakim6oj3qe3jb8i35hsf2ug62.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -39,10 +55,10 @@
               "client_type": 3
             },
             {
-              "client_id": "388940608397-jm87rq9bslhmn1h9tdabusnt9d6bpmqc.apps.googleusercontent.com",
+              "client_id": "388940608397-0kg76qedkgnn0u5qra2glvnmivb8pgt4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.spree"
+                "bundle_id": "club.devsoc.spree26"
               }
             }
           ]

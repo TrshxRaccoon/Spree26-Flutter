@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>388940608397-l6umqrm0a62ue15ujtrjb6e9f54ntidf.apps.googleusercontent.com</string>
+	<string>388940608397-6ta15ktdjo9pcvlro6ucunh55js1nch6.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.388940608397-l6umqrm0a62ue15ujtrjb6e9f54ntidf</string>
+	<string>com.googleusercontent.apps.388940608397-6ta15ktdjo9pcvlro6ucunh55js1nch6</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>388940608397-q8adggbakim6oj3qe3jb8i35hsf2ug62.apps.googleusercontent.com</string>
+	<string>388940608397-9t20frv41kdjsmq335o6j4mp3d40f6c4.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAmdJY_H7e4bn1ENifrbNej3FuYkHIizZM</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>club.devsoc.spree26</string>
+	<string>club.devsoc.spree25</string>
 	<key>PROJECT_ID</key>
 	<string>spree-26-flutter</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:388940608397:ios:d4ce9221f0f85aeef143c4</string>
+	<string>1:388940608397:ios:1d5738e8fdbc67baf143c4</string>
 </dict>
 </plist>
