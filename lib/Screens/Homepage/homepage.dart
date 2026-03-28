@@ -5,8 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 
-import 'package:spree/Widgets/event_card.dart';
-
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
@@ -166,66 +164,6 @@ class _HomepageState extends State<Homepage> {
                             ),
                           ),
                         ],
-                      ),
-
-                      SizedBox(height: 24.h),
-
-                      // EVENTS TAB
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Discover Events",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => debugPrint('View All Clicked'),
-                              child: Text(
-                                "View All",
-                                style: TextStyle(
-                                  color: Color(0xFFFF7A1A),
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.only(left: 16.w),
-                        child: Row(
-                          children: [
-                            EventCard(
-                              image: 'assets/events/battle_of_bands.png',
-                              category: 'CULTURAL',
-                              title: 'Battle of Bands',
-                              date: 'Oct 24, 2026',
-                            ),
-                            SizedBox(width: 16.w),
-                            EventCard(
-                              image: 'assets/events/cricket.png',
-                              category: 'SPORTS',
-                              title: 'Cricket',
-                              date: 'Oct 25, 2026',
-                            ),
-                            SizedBox(width: 16.w),
-                            EventCard(
-                              image: 'assets/events/fash_night.png',
-                              category: 'ENTERTAINMENT',
-                              title: 'Fashion Night',
-                              date: 'Oct 26, 2026',
-                            ),
-                          ],
-                        ),
                       ),
 
                       SizedBox(height: 24.h),
