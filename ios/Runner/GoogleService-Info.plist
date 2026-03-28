@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>388940608397-l6umqrm0a62ue15ujtrjb6e9f54ntidf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.388940608397-l6umqrm0a62ue15ujtrjb6e9f54ntidf</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>388940608397-q8adggbakim6oj3qe3jb8i35hsf2ug62.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAmdJY_H7e4bn1ENifrbNej3FuYkHIizZM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>388940608397</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>club.devsoc.spree26</string>
+	<key>PROJECT_ID</key>
+	<string>spree-26-flutter</string>
+	<key>STORAGE_BUCKET</key>
+	<string>spree-26-flutter.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:388940608397:ios:d4ce9221f0f85aeef143c4</string>
+</dict>
+</plist>

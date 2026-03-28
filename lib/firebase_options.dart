@@ -64,6 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '388940608397',
     projectId: 'spree-26-flutter',
     storageBucket: 'spree-26-flutter.firebasestorage.app',
+    androidClientId: '388940608397-q8adggbakim6oj3qe3jb8i35hsf2ug62.apps.googleusercontent.com',
     iosClientId: '388940608397-l6umqrm0a62ue15ujtrjb6e9f54ntidf.apps.googleusercontent.com',
     iosBundleId: 'club.devsoc.spree26',
   );
@@ -74,6 +75,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '388940608397',
     projectId: 'spree-26-flutter',
     storageBucket: 'spree-26-flutter.firebasestorage.app',
+    androidClientId: '388940608397-q8adggbakim6oj3qe3jb8i35hsf2ug62.apps.googleusercontent.com',
     iosClientId: '388940608397-jm87rq9bslhmn1h9tdabusnt9d6bpmqc.apps.googleusercontent.com',
     iosBundleId: 'com.example.spree',
   );
