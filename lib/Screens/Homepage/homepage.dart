@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 
+import 'package:spree/Merch/merch_home.dart';
 import 'package:spree/Screens/Contact/contact_us.dart';
 import 'package:spree/Screens/Homepage/home_gallery.dart';
 import 'package:spree/Screens/Sponsors/sponsors.dart';
@@ -255,6 +256,30 @@ class _HomepageState extends State<Homepage> {
                           },
                         ),
                       ),
+
+                      if (!_isGuest) ...[
+                        SizedBox(height: 12.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _homeNavButton(
+                                  label: 'Merch',
+                                  icon: Icons.checkroom_outlined,
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute<void>(
+                                        builder: (_) => const MerchHome(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
 
                       SizedBox(height: 24.h),
 
