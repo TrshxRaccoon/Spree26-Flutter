@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spree/Merch/merch_item_card.dart';
@@ -162,10 +164,27 @@ class _MerchHomeState extends State<MerchHome> {
               child: MerchItemCard(item: item),
             ),
           ),
-          if (!_order!.booked) ...[
-            SizedBox(height: 24.h),
-            _buildBookButton(),
-          ],
+          if (!_order!.booked)
+            StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: FirebaseFirestore.instanceFor(
+                app: Firebase.app(),
+                databaseId: 'spree-26',
+              ).collection('config').doc('book_merch_button').snapshots(),
+              builder: (context, snapshot) {
+                bool show = true;
+                if (snapshot.hasData && snapshot.data!.exists) {
+                  final v = snapshot.data!.data()?['show'];
+                  show = v is bool ? v : true;
+                }
+                if (!show) return const SizedBox.shrink();
+                return Column(
+                  children: [
+                    SizedBox(height: 24.h),
+                    _buildBookButton(),
+                  ],
+                );
+              },
+            ),
           SizedBox(height: 16.h),
         ],
       ),
