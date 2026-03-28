@@ -215,9 +215,27 @@ class _MerchHomeState extends State<MerchHome> {
           Icon(Icons.confirmation_number_outlined, color: PaymentsUi.primary, size: 20.sp),
           SizedBox(width: 10.w),
           Expanded(
-            child: Text(
-              "You're booked! Show your OTP at the distribution counter.",
-              style: PaymentsUi.body(color: PaymentsUi.textSecondary),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "You're booked! Show your OTP at the distribution counter.",
+                  style: PaymentsUi.body(color: PaymentsUi.textSecondary),
+                ),
+                if (_order!.otp != null) ...[
+                  SizedBox(height: 8.h),
+                  Text(
+                    _order!.otp!,
+                    style: TextStyle(
+                      fontFamily: 'Orbitron_Bold',
+                      fontSize: 28.sp,
+                      fontWeight: FontWeight.w700,
+                      color: PaymentsUi.textPrimary,
+                      letterSpacing: 6,
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
         ],
