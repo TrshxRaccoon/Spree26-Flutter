@@ -23,13 +23,15 @@ class MerchItem {
 
 class MerchOrder {
   final bool booked;
+  final String? otp;
   final List<MerchItem> items;
 
-  MerchOrder({required this.booked, required this.items});
+  MerchOrder({required this.booked, this.otp, required this.items});
 
   factory MerchOrder.fromJson(Map<String, dynamic> json) {
     return MerchOrder(
       booked: json['booked'] as bool? ?? false,
+      otp: json['otp'] as String?,
       items: (json['items'] as List<dynamic>)
           .map((item) => MerchItem.fromJson(item as Map<String, dynamic>))
           .toList(),
