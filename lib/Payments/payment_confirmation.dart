@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:spree/Payments/payment_failed.dart';
 import 'package:spree/Payments/payment_success.dart';
+import 'package:spree/Payments/payments_ui.dart';
 import 'package:spree/Services/payments.dart';
 
 /// Single route: loading → [PaymentSuccess] or [PaymentFailed] (same page / no extra pushes).
@@ -114,16 +115,16 @@ class _PaymentConfirmationState extends State<PaymentConfirmation> {
     Widget child;
     if (_loading) {
       child = Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: PaymentsUi.bg,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CircularProgressIndicator(color: Colors.white),
+              CircularProgressIndicator(color: PaymentsUi.primary),
               SizedBox(height: 24.h),
               Text(
                 'Processing payment…',
-                style: TextStyle(color: Colors.white70, fontSize: 14.sp),
+                style: PaymentsUi.body(color: PaymentsUi.textSecondary),
               ),
             ],
           ),

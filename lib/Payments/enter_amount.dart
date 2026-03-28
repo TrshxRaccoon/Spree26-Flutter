@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spree/Payments/enter_pin.dart';
+import 'package:spree/Payments/payments_ui.dart';
 import 'package:spree/Payments/reset_pin.dart';
 
 class EnterAmount extends StatefulWidget {
@@ -61,8 +62,12 @@ class _EnterAmountState extends State<EnterAmount> {
   void _snack(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(msg, textAlign: TextAlign.center),
-        backgroundColor: Colors.redAccent,
+        content: Text(
+          msg,
+          textAlign: TextAlign.center,
+          style: PaymentsUi.body(color: PaymentsUi.onPrimary),
+        ),
+        backgroundColor: PaymentsUi.error,
         duration: const Duration(seconds: 2),
       ),
     );
@@ -71,91 +76,76 @@ class _EnterAmountState extends State<EnterAmount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        title: Text('Enter amount', style: TextStyle(fontSize: 18.sp)),
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: 32.h),
-            Text(
-              'Paying to',
-              style: TextStyle(color: Colors.white54, fontSize: 14.sp),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              widget.vendor,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 32.h),
-            TextField(
-              controller: _amountController,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(6),
-              ],
-              keyboardType: TextInputType.number,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 28.sp,
-                fontWeight: FontWeight.w600,
-              ),
-              decoration: InputDecoration(
-                hintText: 'Amount (₹)',
-                hintStyle: TextStyle(color: Colors.white38),
-                filled: true,
-                fillColor: const Color(0xFF1E1E1E),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: Color(0xFF334155)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: Color(0xFF334155)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: Color(0xFF2563EB)),
+      backgroundColor: PaymentsUi.bg,
+      appBar: PaymentsUi.appBar(context, 'Enter amount'),
+      body: PaymentsUi.centeredContent(
+        context: context,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(
+            left: 24.w,
+            right: 24.w,
+            top: 8.h,
+            bottom: MediaQuery.paddingOf(context).bottom + 24.h,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text('Paying to', style: PaymentsUi.labelOverField()),
+              SizedBox(height: 6.h),
+              Text(
+                widget.vendor,
+                style: TextStyle(
+                  fontFamily: PaymentsUi.font,
+                  color: PaymentsUi.textPrimary,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-            ),
-            SizedBox(height: 24.h),
-            FilledButton(
-              onPressed: _submit,
-              style: FilledButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16.h),
-                backgroundColor: const Color(0xFF2563EB),
+              SizedBox(height: 28.h),
+              TextField(
+                controller: _amountController,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(6),
+                ],
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: PaymentsUi.font,
+                  color: PaymentsUi.textPrimary,
+                  fontSize: 26.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                decoration: PaymentsUi.inputDecoration(hint: 'Amount (₹)'),
               ),
-              child: Text('Continue', style: TextStyle(fontSize: 16.sp)),
-            ),
-            SizedBox(height: 16.h),
-            TextButton(
-              onPressed: () {
-                Navigator.push<void>(
-                  context,
-                  PageRouteBuilder<void>(
-                    pageBuilder: (context, a1, a2) => const ResetPin(),
-                    transitionDuration: Duration.zero,
-                    reverseTransitionDuration: Duration.zero,
+              SizedBox(height: 24.h),
+              FilledButton(
+                onPressed: _submit,
+                style: PaymentsUi.primaryButtonStyle(),
+                child: const Text('Continue'),
+              ),
+              SizedBox(height: 12.h),
+              TextButton(
+                onPressed: () {
+                  Navigator.push<void>(
+                    context,
+                    PageRouteBuilder<void>(
+                      pageBuilder: (context, a1, a2) => const ResetPin(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                },
+                child: Text(
+                  'Reset PIN',
+                  style: PaymentsUi.body(
+                    color: PaymentsUi.textSecondary,
+                    weight: FontWeight.w500,
                   ),
-                );
-              },
-              child: Text(
-                'Reset PIN',
-                style: TextStyle(color: Colors.white70, fontSize: 14.sp),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

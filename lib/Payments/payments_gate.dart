@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spree/Payments/payments_ui.dart';
 import 'package:spree/Payments/qr_scanner.dart';
 import 'package:spree/Payments/set_pin.dart';
 import 'package:spree/Services/payments.dart';
@@ -36,7 +37,7 @@ class _PaymentsGateState extends State<PaymentsGate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: PaymentsUi.bg,
       body: FutureBuilder<bool>(
         future: _checkPinFuture,
         builder: (context, snapshot) {
@@ -45,7 +46,7 @@ class _PaymentsGateState extends State<PaymentsGate> {
               child: SizedBox(
                 width: 40.w,
                 height: 40.w,
-                child: const CircularProgressIndicator(color: Colors.white),
+                child: CircularProgressIndicator(color: PaymentsUi.primary),
               ),
             );
           }
@@ -68,16 +69,17 @@ class _PaymentsGateState extends State<PaymentsGate> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, color: Colors.redAccent, size: 40),
+            Icon(Icons.error_outline, color: PaymentsUi.error, size: 40.r),
             SizedBox(height: 20.h),
             Text(
               'Session expired. Please logout and try again with your institute account.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white70, fontSize: 14.sp),
+              style: PaymentsUi.body(),
             ),
             SizedBox(height: 24.h),
             FilledButton(
               onPressed: _retryCheckPin,
+              style: PaymentsUi.primaryButtonStyle(),
               child: const Text('Retry'),
             ),
           ],

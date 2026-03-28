@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spree/Payments/payments_ui.dart';
 
 class PaymentSuccess extends StatefulWidget {
   final String amount;
@@ -28,148 +29,135 @@ class _PaymentSuccessState extends State<PaymentSuccess> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Center(
-          child: Container(
-            height: 791.h,
-            width: 358.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Color(0xFF160D26),
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: 33.h),
-                Text(
-                  'Payment Status',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 18.h,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 40.h),
-                Image.asset(
-                  'assets/payments/tick.png',
-                  width: 120.w,
-                  height: 120.h,
-                ),
-                Text(
-                  'Payment\nSuccessful!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 30.h,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                Text(
-                  'Your transaction has been completed',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 16.h,
-                    color: Colors.grey,
-                  ),
-                ),
-                SizedBox(height: 20.h),
-                Text(
-                  '₹${widget.amount}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 50.h,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Paid to ${widget.vendorName}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 18.h,
-                    color: Color(0xFF1E82BE),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 30.h),
-                Container(
-                  height: 150.h,
-                  width: 340.w,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20.h,
-                    horizontal: 16.w,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF2A1E3F),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Time: ${widget.time}',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 24.h,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+        backgroundColor: PaymentsUi.bg,
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: PaymentsUi.centeredContent(
+                  context: context,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 24.h,
+                          horizontal: 16.w,
                         ),
-                        SizedBox(height:10.h),
-                        Text(
-                          'Date: ${widget.date}',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 24.h,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.r),
+                          color: PaymentsUi.surface,
+                          border: Border.all(color: PaymentsUi.borderMuted),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 50.h),
-                GestureDetector(
-                  onTap: () {
-                    if (widget.onBackToHome != null) {
-                      widget.onBackToHome!();
-                    } else {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: Container(
-                    height: 56.h,
-                    width: 308.w,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF1E82BE),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Back to Home',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 16.h,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                        child: Column(
+                          children: [
+                            Text(
+                              'Payment successful',
+                              style: TextStyle(
+                                fontFamily: PaymentsUi.font,
+                                fontSize: 18.sp,
+                                color: PaymentsUi.textPrimary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Image.asset(
+                              'assets/payments/tick.png',
+                              width: 100.w,
+                              height: 100.h,
+                            ),
+                            SizedBox(height: 12.h),
+                            Text(
+                              'Your transaction is complete',
+                              textAlign: TextAlign.center,
+                              style: PaymentsUi.body(),
+                            ),
+                            SizedBox(height: 16.h),
+                            Text(
+                              '₹${widget.amount}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: PaymentsUi.font,
+                                fontSize: 36.sp,
+                                color: PaymentsUi.textPrimary,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            SizedBox(height: 6.h),
+                            Text(
+                              'Paid to ${widget.vendorName}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: PaymentsUi.font,
+                                fontSize: 15.sp,
+                                color: PaymentsUi.primary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(
+                                vertical: 16.h,
+                                horizontal: 12.w,
+                              ),
+                              decoration: BoxDecoration(
+                                color: PaymentsUi.surfaceElevated,
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Time · ${widget.time}',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: PaymentsUi.font,
+                                      fontSize: 15.sp,
+                                      color: PaymentsUi.textPrimary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.h),
+                                  Text(
+                                    'Date · ${widget.date}',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: PaymentsUi.font,
+                                      fontSize: 15.sp,
+                                      color: PaymentsUi.textPrimary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 24.h),
+                            SizedBox(
+                              width: double.infinity,
+                              child: FilledButton(
+                                onPressed: () {
+                                  if (widget.onBackToHome != null) {
+                                    widget.onBackToHome!();
+                                  } else {
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                                style: PaymentsUi.primaryButtonStyle(),
+                                child: const Text('Back to Home'),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

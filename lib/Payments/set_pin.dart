@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spree/Payments/payments_ui.dart';
 import 'package:spree/Services/payments.dart';
 
 class SetPin extends StatefulWidget {
@@ -21,25 +22,24 @@ class _SetPinState extends State<SetPin> {
 
   late FocusNode _pinFocus;
   late FocusNode _confirmPinFocus;
-  TextEditingController? _activeController;
+
+  void _onFocusChanged() {
+    if (mounted) setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
     _pinFocus = FocusNode();
     _confirmPinFocus = FocusNode();
-    _activeController = _pinController;
-
-    _pinFocus.addListener(() {
-      if (_pinFocus.hasFocus) setState(() => _activeController = _pinController);
-    });
-    _confirmPinFocus.addListener(() {
-      if (_confirmPinFocus.hasFocus) setState(() => _activeController = _confirmPinController);
-    });
+    _pinFocus.addListener(_onFocusChanged);
+    _confirmPinFocus.addListener(_onFocusChanged);
   }
 
   @override
   void dispose() {
+    _pinFocus.removeListener(_onFocusChanged);
+    _confirmPinFocus.removeListener(_onFocusChanged);
     _pinController.dispose();
     _confirmPinController.dispose();
     _pinFocus.dispose();
@@ -54,10 +54,10 @@ class _SetPinState extends State<SetPin> {
           content: Text(
             'Please enter exactly 6 digits for PIN',
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: "Cinzel", fontSize: 20.r),
+            style: PaymentsUi.body(color: PaymentsUi.onPrimary),
           ),
-          backgroundColor: Colors.redAccent,
-          duration: Duration(seconds: 2),
+          backgroundColor: PaymentsUi.error,
+          duration: const Duration(seconds: 2),
         ),
       );
       return false;
@@ -68,10 +68,10 @@ class _SetPinState extends State<SetPin> {
           content: Text(
             'Please enter exactly 6 digits for confirm PIN',
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: "Cinzel", fontSize: 20.r),
+            style: PaymentsUi.body(color: PaymentsUi.onPrimary),
           ),
-          backgroundColor: Colors.redAccent,
-          duration: Duration(seconds: 2),
+          backgroundColor: PaymentsUi.error,
+          duration: const Duration(seconds: 2),
         ),
       );
       return false;
@@ -82,10 +82,10 @@ class _SetPinState extends State<SetPin> {
           content: Text(
             'PIN and Confirm PIN do not match',
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: "Cinzel", fontSize: 20.r),
+            style: PaymentsUi.body(color: PaymentsUi.onPrimary),
           ),
-          backgroundColor: Colors.redAccent,
-          duration: Duration(seconds: 2),
+          backgroundColor: PaymentsUi.error,
+          duration: const Duration(seconds: 2),
         ),
       );
       return false;
@@ -101,19 +101,19 @@ class _SetPinState extends State<SetPin> {
     });
 
     try {
-      bool success = await _services.setPin(_pinController.text);
+      final success = await _services.setPin(_pinController.text);
 
       if (success) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text(
                 'PIN set successfully!',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: "Cinzel"),
+                style: PaymentsUi.body(color: PaymentsUi.onPrimary),
               ),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
+              backgroundColor: const Color(0xFF16A34A),
+              duration: const Duration(seconds: 2),
             ),
           );
 
@@ -126,14 +126,14 @@ class _SetPinState extends State<SetPin> {
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text(
                 'Failed to set PIN. Please try again.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: "Cinzel"),
+                style: PaymentsUi.body(color: PaymentsUi.onPrimary),
               ),
-              backgroundColor: Colors.redAccent,
-              duration: Duration(seconds: 2),
+              backgroundColor: PaymentsUi.error,
+              duration: const Duration(seconds: 2),
             ),
           );
         }
@@ -145,9 +145,9 @@ class _SetPinState extends State<SetPin> {
             content: Text(
               'Error: ${e.toString()}',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontFamily: "Cinzel"),
+              style: PaymentsUi.body(color: PaymentsUi.onPrimary),
             ),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: PaymentsUi.error,
             duration: const Duration(seconds: 3),
           ),
         );
@@ -161,210 +161,124 @@ class _SetPinState extends State<SetPin> {
     }
   }
 
-  void _onKeyPressed(String key) {
-    if (_activeController == null) return;
-    setState(() {
-      if (key == '<') {
-        if (_activeController!.text.isNotEmpty) {
-          _activeController!.text = _activeController!.text.substring(0, _activeController!.text.length - 1);
-        }
-      } else {
-        if (_activeController!.text.length < 6) {
-          _activeController!.text += key;
-        }
-        // Mirroring your original onChanged logic to unfocus
-        if (_activeController!.text.length == 6) {
-          if (_activeController == _pinController) {
-            FocusScope.of(context).requestFocus(_confirmPinFocus);
-          } else {
-            FocusScope.of(context).unfocus();
-          }
-        }
-      }
-    });
-  }
-
   Widget _buildInputBox({
     required TextEditingController controller,
     required FocusNode focusNode,
     required String hint,
+    FocusNode? nextFocusWhenFilled,
+    int maxLength = 6,
   }) {
-    bool isActive = focusNode.hasFocus;
+    final isActive = focusNode.hasFocus;
     return Container(
-      width: 343.w,
-      height: 72.h,
+      width: double.infinity,
+      height: 56.h,
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E), // Dark mode surface
+        color: PaymentsUi.surface,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          width: 1.w,
-          color: isActive ? const Color(0xFF2563EB) : const Color(0xFF334155),
+          width: 1,
+          color: isActive ? PaymentsUi.primary : PaymentsUi.border,
         ),
       ),
       child: Center(
         child: TextField(
           controller: controller,
           focusNode: focusNode,
-          readOnly: true, // Prevents system keyboard from popping up
-          showCursor: true,
+          keyboardType: TextInputType.number,
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(6),
+            LengthLimitingTextInputFormatter(maxLength),
           ],
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 24.r,
-            color: const Color(0xFFF1F5F9), // Digits color requested
-            fontFamily: 'Albert',
+            fontFamily: PaymentsUi.font,
+            fontSize: 20.sp,
+            color: PaymentsUi.textPrimary,
+            fontWeight: FontWeight.w500,
           ),
           obscureText: true,
-          obscuringCharacter: "*",
+          obscuringCharacter: '•',
+          onChanged: (value) {
+            if (value.length != maxLength) return;
+            if (nextFocusWhenFilled != null) {
+              FocusScope.of(context).requestFocus(nextFocusWhenFilled);
+            } else {
+              FocusScope.of(context).unfocus();
+            }
+          },
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              fontSize: 20.r,
-              color: const Color(0xFF94A3B8),
-              fontFamily: 'Albert',
+              fontFamily: PaymentsUi.font,
+              fontSize: 14.sp,
+              color: PaymentsUi.textMuted,
             ),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildKeyPad() {
-    return Column(
-      children: [
-        _buildKeyPadRow(['1', '2', '3']),
-        SizedBox(height: 16.h),
-        _buildKeyPadRow(['4', '5', '6']),
-        SizedBox(height: 16.h),
-        _buildKeyPadRow(['7', '8', '9']),
-        SizedBox(height: 16.h),
-        _buildKeyPadRow(['', '0', '<']),
-      ],
-    );
-  }
-
-  Widget _buildKeyPadRow(List<String> keys) {
-    return SizedBox(
-      width: 342.w,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: keys.map((key) => _buildKey(key)).toList(),
-      ),
-    );
-  }
-
-  Widget _buildKey(String key) {
-    if (key.isEmpty) {
-      return SizedBox(width: 103.33.w, height: 64.h);
-    }
-    return GestureDetector(
-      onTap: () => _onKeyPressed(key),
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        width: 103.33.w, // Dimensions requested
-        height: 64.h,    // Dimensions requested
-        alignment: Alignment.center,
-        child: key == '<'
-            ? Icon(Icons.backspace_outlined, color: const Color(0xFFF1F5F9), size: 28.r)
-            : Text(
-                key,
-                style: TextStyle(
-                  fontSize: 32.sp,
-                  color: const Color(0xFFF1F5F9), // White color for digits
-                  fontWeight: FontWeight.w600,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: PaymentsUi.bg,
+      appBar: PaymentsUi.backOnlyAppBar(context),
+      body: PaymentsUi.centeredContent(
+        context: context,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(
+            left: 24.w,
+            right: 24.w,
+            bottom: MediaQuery.paddingOf(context).bottom + 24.h,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 8.h),
+              Text('SET PIN', style: PaymentsUi.displayTitle()),
+              SizedBox(height: 8.h),
+              Text(
+                'Choose a 6-digit PIN for wallet payments.',
+                textAlign: TextAlign.center,
+                style: PaymentsUi.body(),
+              ),
+              SizedBox(height: 28.h),
+              _buildInputBox(
+                controller: _pinController,
+                focusNode: _pinFocus,
+                hint: 'New PIN',
+                nextFocusWhenFilled: _confirmPinFocus,
+              ),
+              SizedBox(height: 12.h),
+              _buildInputBox(
+                controller: _confirmPinController,
+                focusNode: _confirmPinFocus,
+                hint: 'Confirm PIN',
+              ),
+              SizedBox(height: 28.h),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: _isLoading ? null : _handleSetPin,
+                  style: PaymentsUi.primaryButtonStyle(),
+                  child: _isLoading
+                      ? SizedBox(
+                          height: 22.h,
+                          width: 22.w,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: PaymentsUi.onPrimary,
+                          ),
+                        )
+                      : const Text('SET PIN'),
                 ),
               ),
-      ),
-    );
-  }
-
-@override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xFF111111), // Dark mode background
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          scrolledUnderElevation: 0,
-          elevation: 0.0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white, size: 24.r),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 375.w,
-                  height: 54.h,
-                  child: Center(
-                    child: Text(
-                      "SET PIN",
-                      style: TextStyle(
-                        fontSize: 36.r,
-                        color: Colors.white,
-                        fontFamily: 'Orbitron_Bold',
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 36.h),
-                _buildInputBox(
-                  controller: _pinController,
-                  focusNode: _pinFocus,
-                  hint: "ENTER YOUR PIN",
-                ),
-                SizedBox(height: 10.h),
-                _buildInputBox(
-                  controller: _confirmPinController,
-                  focusNode: _confirmPinFocus,
-                  hint: "RE-ENTER YOUR PIN",
-                ),
-                SizedBox(height: 40.h),
-                _buildKeyPad(),
-                SizedBox(height: 40.h),
-                GestureDetector(
-                  onTap: _isLoading ? null : _handleSetPin,
-                  child: Container(
-                    height: 56.h, // Requested container dimension
-                    width: 342.w, // Requested container dimension
-                    decoration: BoxDecoration(
-                      color: _isLoading ? const Color(0xFF334155) : const Color(0xFF2563EB),
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Center(
-                      child: _isLoading
-                          ? SizedBox(
-                              height: 20.h,
-                              width: 20.w,
-                              child: const CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text(
-                              'SET PIN',
-                              style: TextStyle(
-                                fontFamily: 'Orbitron_Bold',
-                                color: Colors.white,
-                                fontSize: 20.r,
-                              ),
-                            ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 24.h),
-              ],
-            ),
+            ],
           ),
         ),
       ),

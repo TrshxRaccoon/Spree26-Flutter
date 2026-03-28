@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:spree/Payments/enter_amount.dart';
+import 'package:spree/Payments/payments_ui.dart';
 import 'package:spree/Services/payments.dart';
 
 /// Camera QR scan → [Services.validateVendor] → [EnterAmount] on success.
@@ -101,9 +102,9 @@ class _QrScannerScreenState extends State<QrScannerScreen>
           SnackBar(
             content: Text(
               'Invalid QR code. Please try again.',
-              style: TextStyle(fontSize: 14.sp),
+              style: PaymentsUi.body(color: PaymentsUi.onPrimary),
             ),
-            backgroundColor: const Color(0xFFC73C3C),
+            backgroundColor: PaymentsUi.error,
           ),
         );
         _isProcessingScan = false;
@@ -119,18 +120,21 @@ class _QrScannerScreenState extends State<QrScannerScreen>
           return PopScope(
             canPop: false,
             child: AlertDialog(
-              backgroundColor: const Color(0xFF1E1E1E),
+              backgroundColor: PaymentsUi.surface,
               content: Row(
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: 28,
                     height: 28,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: PaymentsUi.primary,
+                    ),
                   ),
                   SizedBox(width: 16.w),
                   Text(
                     'Validating vendor…',
-                    style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                    style: PaymentsUi.body(color: PaymentsUi.textPrimary),
                   ),
                 ],
               ),
@@ -157,9 +161,9 @@ class _QrScannerScreenState extends State<QrScannerScreen>
             SnackBar(
               content: Text(
                 'Vendor not found, please try again.',
-                style: TextStyle(fontSize: 14.sp),
+                style: PaymentsUi.body(color: PaymentsUi.onPrimary),
               ),
-              backgroundColor: const Color(0xFFC73C3C),
+              backgroundColor: PaymentsUi.error,
             ),
           );
           _isProcessingScan = false;
@@ -172,9 +176,9 @@ class _QrScannerScreenState extends State<QrScannerScreen>
           SnackBar(
             content: Text(
               'Error processing request. Please try again.',
-              style: TextStyle(fontSize: 14.sp),
+              style: PaymentsUi.body(color: PaymentsUi.onPrimary),
             ),
-            backgroundColor: const Color(0xFFC73C3C),
+            backgroundColor: PaymentsUi.error,
           ),
         );
         _isProcessingScan = false;
@@ -200,69 +204,68 @@ class _QrScannerScreenState extends State<QrScannerScreen>
 
   @override
   Widget build(BuildContext context) {
+    final scanSize = MediaQuery.sizeOf(context).shortestSide * 0.72;
+    final box = scanSize.clamp(220.0, 340.0);
+
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        title: Text('Scan QR', style: TextStyle(fontSize: 18.sp)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Point the camera at the vendor QR code',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white70, fontSize: 14.sp),
-            ),
-            SizedBox(height: 24.h),
-            Container(
-              height: 280.h,
-              width: 280.w,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(color: const Color(0xFF2563EB), width: 2),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(14.r),
-                child: _cameraPermissionDenied
-                    ? ColoredBox(
-                        color: const Color(0xFF111111),
-                        child: Icon(
-                          Icons.camera_alt_outlined,
-                          size: 48.r,
-                          color: Colors.white38,
-                        ),
-                      )
-                    : QRView(
-                        key: qrKey,
-                        onQRViewCreated: _onQRViewCreated,
-                        overlay: QrScannerOverlayShape(
-                          borderColor: const Color(0xFF2563EB),
-                          borderRadius: 16,
-                          borderLength: 40,
-                          borderWidth: 8,
-                          cutOutSize: 240.w,
-                        ),
-                        onPermissionSet: (c, p) =>
-                            _onPermissionSet(context, c, p),
-                      ),
-              ),
-            ),
-            if (_cameraPermissionDenied) ...[
-              SizedBox(height: 16.h),
+      backgroundColor: PaymentsUi.bg,
+      appBar: PaymentsUi.appBar(context, 'Scan QR'),
+      body: PaymentsUi.centeredContent(
+        context: context,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               Text(
-                'Enable camera permission in Settings to scan.',
+                'Point the camera at the vendor QR code',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white54, fontSize: 12.sp),
+                style: PaymentsUi.body(color: PaymentsUi.textSecondary),
               ),
+              SizedBox(height: 24.h),
+              Container(
+                height: box,
+                width: box,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.r),
+                  border: Border.all(color: PaymentsUi.primary, width: 2),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14.r),
+                  child: _cameraPermissionDenied
+                      ? ColoredBox(
+                          color: PaymentsUi.surfaceElevated,
+                          child: Icon(
+                            Icons.camera_alt_outlined,
+                            size: 48.r,
+                            color: PaymentsUi.textMuted,
+                          ),
+                        )
+                      : QRView(
+                          key: qrKey,
+                          onQRViewCreated: _onQRViewCreated,
+                          overlay: QrScannerOverlayShape(
+                            borderColor: PaymentsUi.primary,
+                            borderRadius: 16,
+                            borderLength: 40,
+                            borderWidth: 8,
+                            cutOutSize: box * 0.85,
+                          ),
+                          onPermissionSet: (c, p) =>
+                              _onPermissionSet(context, c, p),
+                        ),
+                ),
+              ),
+              if (_cameraPermissionDenied) ...[
+                SizedBox(height: 16.h),
+                Text(
+                  'Enable camera permission in Settings to scan.',
+                  textAlign: TextAlign.center,
+                  style: PaymentsUi.bodySmall(),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
