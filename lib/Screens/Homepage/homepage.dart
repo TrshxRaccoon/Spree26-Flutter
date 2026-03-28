@@ -5,6 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 
+import 'package:spree/Screens/Contact/contact_us.dart';
+import 'package:spree/Screens/Sponsors/sponsors.dart';
+
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
@@ -85,6 +88,45 @@ class _HomepageState extends State<Homepage> {
         false;
   }
 
+  Widget _homeNavButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 10.w),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E1E1E).withValues(alpha: 0.75),
+          borderRadius: BorderRadius.circular(14.r),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: const Color(0xFFFF7A1A), size: 20.sp),
+            SizedBox(width: 6.w),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -99,24 +141,6 @@ class _HomepageState extends State<Homepage> {
       },
       child: Scaffold(
         backgroundColor: Colors.black,
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.black54,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          surfaceTintColor: Colors.transparent,
-          leading: IconButton(
-            onPressed: () => debugPrint('Menu Clicked'),
-            icon: Icon(Icons.menu, color: Color(0xFFCBD5E1)),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () => debugPrint('Notifications Clicked'),
-              icon: Icon(Icons.notifications_none, color: Color(0xFFCBD5E1)),
-            ),
-            SizedBox(width: 8.w),
-          ],
-        ),
         body: Stack(
           children: [
             AnimatedBuilder(
@@ -164,6 +188,43 @@ class _HomepageState extends State<Homepage> {
                             ),
                           ),
                         ],
+                      ),
+
+                      SizedBox(height: 20.h),
+
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: _homeNavButton(
+                                label: 'Sponsors',
+                                icon: Icons.handshake_outlined,
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute<void>(
+                                      builder: (_) => const Sponsors(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 12.w),
+                            Expanded(
+                              child: _homeNavButton(
+                                label: 'Contact Us',
+                                icon: Icons.contact_mail_outlined,
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute<void>(
+                                      builder: (_) => const ContactUsPage(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
 
                       SizedBox(height: 24.h),
