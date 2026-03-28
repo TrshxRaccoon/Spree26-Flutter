@@ -51,7 +51,6 @@ class _LoginScreenState extends State<LoginScreen> {
         debugPrint('Clearing existing session');
         await _googleSignIn.signOut();
         await _googleSignIn.disconnect();
-        await _storage.delete(key: 'access_token');
         await _storage.delete(key: 'user_name');
         await _storage.delete(key: 'user_email');
         await _storage.delete(key: 'user_type');
