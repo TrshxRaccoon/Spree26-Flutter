@@ -121,7 +121,7 @@ class _MyAppState extends State<MyApp> {
       builder: (_, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Spree',
+          title: 'Spree 26',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
