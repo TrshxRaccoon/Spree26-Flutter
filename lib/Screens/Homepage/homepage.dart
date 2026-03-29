@@ -25,8 +25,6 @@ class _HomepageState extends State<Homepage> {
   static const _storage = FlutterSecureStorage();
   bool _isGuest = true;
 
-  String youtubeUrl = "https://youtu.be/dQw4w9WgXcQ";
-
   @override
   void initState() {
     super.initState();
@@ -257,7 +255,7 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
 
-                      if(!_isGuest)
+                      if (!_isGuest) ...[
                         SizedBox(height: 12.h),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -279,6 +277,7 @@ class _HomepageState extends State<Homepage> {
                             ],
                           ),
                         ),
+                      ],
 
                       SizedBox(height: 24.h),
 
@@ -286,85 +285,125 @@ class _HomepageState extends State<Homepage> {
 
                       SizedBox(height: 24.h),
 
-                      SizedBox(
-                        width: double.infinity,
-                        child: Padding(
-                          padding: EdgeInsetsGeometry.only(
-                            left: 16.w,
-                            right: 16.w,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20.r),
-                            child: BackdropFilter(
-                              filter: ui.ImageFilter.blur(
-                                sigmaX: 5.0,
-                                sigmaY: 5.0,
+                      StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                        stream: FirebaseFirestore.instanceFor(
+                          app: Firebase.app(),
+                          databaseId: 'spree-26',
+                        )
+                            .collection('config')
+                            .doc('api_config')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return const SizedBox.shrink();
+                          }
+                          if (!snapshot.hasData) {
+                            return SizedBox(
+                              width: double.infinity,
+                              child: Padding(
+                                padding: EdgeInsetsGeometry.only(
+                                  left: 16.w,
+                                  right: 16.w,
+                                ),
+                                child: AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              child: AspectRatio(
-                                aspectRatio: 16 / 9,
-                                child: youtubeUrl.isEmpty
-                                    ? Center(
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : GestureDetector(
-                                        onTap: () async {
-                                          final uri = Uri.parse(youtubeUrl);
-                                          if (!await launchUrl(
-                                            uri,
-                                            mode:
-                                                LaunchMode.externalApplication,
-                                          )) {
-                                            if (context.mounted) {
-                                              ScaffoldMessenger.of(
-                                                context,
-                                              ).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                    'Could not open YouTube video',
+                            );
+                          }
+
+                          final doc = snapshot.data!;
+                          if (!doc.exists) {
+                            return const SizedBox.shrink();
+                          }
+                          final data = doc.data();
+                          final dynamic raw = data?['aftermovie'];
+                          final youtubeUrl =
+                              raw is String && raw.trim().isNotEmpty
+                                  ? raw.trim()
+                                  : '';
+                          if (youtubeUrl.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return SizedBox(
+                            width: double.infinity,
+                            child: Padding(
+                              padding: EdgeInsetsGeometry.only(
+                                left: 16.w,
+                                right: 16.w,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.r),
+                                child: BackdropFilter(
+                                  filter: ui.ImageFilter.blur(
+                                    sigmaX: 5.0,
+                                    sigmaY: 5.0,
+                                  ),
+                                  child: AspectRatio(
+                                    aspectRatio: 16 / 9,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        final uri = Uri.parse(youtubeUrl);
+                                        if (!await launchUrl(
+                                          uri,
+                                          mode: LaunchMode.externalApplication,
+                                        )) {
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Could not open YouTube video',
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          Image.network(
+                                            'https://i.ytimg.com/vi/${_extractVideoId(youtubeUrl) ?? ''}/hqdefault.jpg',
+                                            fit: BoxFit.cover,
+                                          ),
+                                          Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons
+                                                      .play_circle_fill_rounded,
+                                                  color: Colors.orange,
+                                                  size: 64.w,
+                                                ),
+                                                Text(
+                                                  "WATCH THE SPREE '25 AFTERMOVIE",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                              );
-                                            }
-                                          }
-                                        },
-                                        child: Stack(
-                                          fit: StackFit.expand,
-                                          children: [
-                                            Image.network(
-                                              'https://i.ytimg.com/vi/${_extractVideoId(youtubeUrl) ?? ''}/hqdefault.jpg',
-                                              fit: BoxFit.cover,
+                                              ],
                                             ),
-                                            Center(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons
-                                                        .play_circle_fill_rounded,
-                                                    color: Colors.orange,
-                                                    size: 64.w,
-                                                  ),
-                                                  Text(
-                                                    "WATCH THE SPREE '25 AFTERMOVIE",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
+                          );
+                        },
                       ),
 
                       SizedBox(height: 24.h),
