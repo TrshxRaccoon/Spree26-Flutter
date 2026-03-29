@@ -171,8 +171,16 @@ class _MerchHomeState extends State<MerchHome> {
                 databaseId: 'spree-26',
               ).collection('config').doc('book_merch_button').snapshots(),
               builder: (context, snapshot) {
+                // Do not default to visible before Firestore delivers — that
+                // flashes the button when remote `show` is false.
+                if (snapshot.hasError) {
+                  return const SizedBox.shrink();
+                }
+                if (!snapshot.hasData) {
+                  return const SizedBox.shrink();
+                }
                 bool show = true;
-                if (snapshot.hasData && snapshot.data!.exists) {
+                if (snapshot.data!.exists) {
                   final v = snapshot.data!.data()?['show'];
                   show = v is bool ? v : true;
                 }

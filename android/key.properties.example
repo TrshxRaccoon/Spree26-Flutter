@@ -1,0 +1,6 @@
+# Copy to key.properties and fill in. Never commit key.properties.
+storePassword=
+keyPassword=
+keyAlias=key0
+# Absolute path, or path relative to the android/ folder (e.g. spree_keystore.jks)
+storeFile=
