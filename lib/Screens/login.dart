@@ -45,11 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {});
 
     try {
-      debugPrint('Starting Google Sign-In process');
-
       // Clear any existing session first
       if (await _googleSignIn.isSignedIn()) {
-        debugPrint('Clearing existing session');
         await _googleSignIn.signOut();
         await _googleSignIn.disconnect();
         await _storage.delete(key: 'user_name');
@@ -57,26 +54,18 @@ class _LoginScreenState extends State<LoginScreen> {
         await _storage.delete(key: 'user_type');
       }
 
-      // debugPrint('Attempting to sign in with Google');
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser != null) {
-        debugPrint('Google Sign-In successful: ${googleUser.email}');
-
         final GoogleSignInAuthentication googleAuth =
             await googleUser.authentication;
         String? idToken = googleAuth.idToken;
-        debugPrint('idToken: $idToken');
-        // debugPrint('ID Token obtained: ${idToken != null ? 'Yes' : 'No'}');
 
         if (idToken != null) {
           try {
-            debugPrint('Fetching API configuration');
             // await Config().fetchAndStoreApiUrl();
 
-            debugPrint('Processing authentication');
             String userType = await Services().auth(idToken);
-            debugPrint('User type determined: $userType');
 
             try {
               await _storage.write(
@@ -86,8 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
               await _storage.write(key: 'user_email', value: googleUser.email);
               await _storage.write(key: 'user_type', value: userType);
             } catch (e) {}
-
-            debugPrint('User data stored successfully');
 
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -107,25 +94,21 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             );
           } catch (authError) {
-            debugPrint('Authentication processing failed: $authError');
             _showSnackBar(
               "Authentication failed. Please try again.",
               Colors.red,
             );
           }
         } else {
-          debugPrint('No ID token received from Google');
           _showSnackBar(
             "Authentication failed. No token received.",
             Colors.red,
           );
         }
       } else {
-        debugPrint('Google Sign-In was canceled by user');
         _showSnackBar("Sign-in canceled", Colors.orange);
       }
     } catch (error) {
-      debugPrint('Error during Google Sign-In: $error');
       _showSnackBar(
         "Sign in failed. Please check your connection and try again.",
         Colors.red,
@@ -145,8 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (credentials.userIdentifier != null) {
-        debugPrint('Apple Sign In Success');
-
         String? userName;
         try {
           await _storage.write(key: 'user_type', value: 'guest');
@@ -162,8 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
             value: credentials.email ?? '',
           );
         } catch (e) {}
-
-        debugPrint('Apple user data stored successfully');
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -182,11 +161,9 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
       } else {
-        debugPrint('Apple Sign In failed - no user identifier');
         _showSnackBar("Apple Sign In failed. Please try again.", Colors.red);
       }
     } catch (error) {
-      debugPrint('Apple Sign In Error: $error');
       _showSnackBar(
         "Sign in failed. Please check your connection.",
         Colors.red,

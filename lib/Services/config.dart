@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -53,7 +51,6 @@ class Config {
   Future<void> fetchAndStoreApiUrl() async {
     try {
       await Firebase.initializeApp();
-      // debugPrint('Fetching API URL');
       // final firestore = FirebaseFirestore.instance;
       final firestore = FirebaseFirestore.instanceFor(
         app: Firebase.app(),
@@ -64,7 +61,6 @@ class Config {
           .doc('api_config')
           .get();
       apiUrl = apiUrlDoc.get('paymentapi');
-      // debugPrint('payment api url : $apiUrl');
 
       // Check if the key already exists before writing
       final existingValue = await _secureStorage.read(key: 'api_url');

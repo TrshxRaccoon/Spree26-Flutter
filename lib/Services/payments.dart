@@ -1,9 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'dart:io';
 // import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 // import 'package:waves24/constants/secrets.dart';
@@ -31,12 +28,9 @@ class Services {
         .doc('api_config')
         .get();
     paymentapi = doc.get('paymentapi');
-    // debugPrint('paymentapi : $paymentapi');
   }
 
   Future<String> auth(String token) async {
-    // debugPrint('API URL2: $paymentapi');
-    // debugPrint('auth url  : $paymentapi/login/student');
     if (paymentapi == null) {
       await initialize();
     }
@@ -46,7 +40,6 @@ class Services {
         headers: <String, String>{'Content-Type': 'application/json'},
         body: jsonEncode(<String, String>{'token': token}),
       );
-      // debugPrint(response.body);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
@@ -59,7 +52,6 @@ class Services {
           } catch (e) {
             // Handle secure storage errors gracefully
           }
-          // debugPrint(responseBody);
           // await _storage.write(
           //     key: 'refresh_token', value: responseBody['refreshToken']);
           return returnedToken;
@@ -79,14 +71,11 @@ class Services {
         }
         return 'guest';
       } else {
-        // debugPrint('Backend rejected with status: ${response.statusCode}');
-        // debugPrint('Backend response body: ${response.body}');
         throw Exception('Failed to authenticate');
       }
     } on SocketException {
       throw Exception('Kindly check your network connection.');
     } catch (e) {
-      // debugPrint('Actual caught error: $e');
       throw Exception('Failed to authenticate.');
     }
   }
@@ -97,9 +86,6 @@ class Services {
     }
     try {
       String? token = await _storage.read(key: 'access_token');
-      debugPrint('Token: $token');
-      // debugPrint('payment endpoint: $paymentapi');
-      debugPrint('access token: $token');
       final response = await http.get(
         Uri.parse('$paymentapi/student/has-pin'),
         headers: <String, String>{
@@ -107,11 +93,8 @@ class Services {
           'Authorization': 'Bearer $token',
         },
       );
-      // debugPrint(response.body);
-      // debugPrint(response.statusCode);
 
       if (response.statusCode == 200) {
-        // debugPrint("response body in check pin: ${response.body}");
         return response.body == jsonEncode({"hasPin": true});
       } else if (response.statusCode == 401) {
         // await getRefreshToken();
@@ -192,22 +175,15 @@ class Services {
   }
 
   Future<String> makePayment(String vendorId, int amount, String pin) async {
-    // debugPrint('make payment called');
 
     try {
       if (paymentapi == null) {
         await initialize();
       }
 
-      // debugPrint('payment api url: $paymentapi');
       token = await _storage.read(key: 'access_token');
       String deviceId = await _getId() ?? 'unknown';
-      // debugPrint(token);
 
-      // debugPrint('device id is : $deviceId');
-      // debugPrint('vendor id is : $vendorId');
-      // debugPrint('amount is : $amount');
-      // debugPrint('pin is : $pin');
 
       final response = await http.post(
         Uri.parse('$paymentapi/transaction'),
@@ -223,8 +199,6 @@ class Services {
         }),
       );
 
-      // debugPrint(response.statusCode);
-      // debugPrint(response.body);
       if (response.statusCode == 201) {
         return response.body;
         //todo: mahir pls check this this is the payment timestamp and dont use datetime.now
@@ -236,7 +210,6 @@ class Services {
     } on SocketException {
       throw Exception('Kindly check your network connection.');
     } catch (e) {
-      // debugPrint('Error in makePayment: $e');
       throw Exception('Failed to make payment: $e');
     }
   }
@@ -280,9 +253,6 @@ class Services {
           'Authorization': 'Bearer $token',
         },
       );
-      // debugPrint('welp welp welp');
-      // debugPrint(response.statusCode);
-      // debugPrint(response.body);
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final balance = data['balance'];
@@ -309,12 +279,9 @@ class Services {
   //       'Authorization': 'Bearer $token',
   //     },
   //   );
-  //   // debugPrint(response.statusCode);
-  //   // debugPrint(response.body);
 
   //   if (response.statusCode == 200) {
   //     // List<dynamic> jsonData = json.decode(response.body);
-  //     // debugPrint(response.body);
   //     // return jsonData.map((json) => Transaction.fromJson(json)).toList();
   //   } else {
   //     throw Exception('Failed to fetch transactions');
@@ -334,8 +301,6 @@ class Services {
           'Authorization': 'Bearer $token',
         },
       );
-      // debugPrint(response.statusCode);
-      // debugPrint(response.body);
       if (response.statusCode == 200) {
         return response.body;
       } else {
@@ -375,9 +340,6 @@ class Services {
     }
   }
 
-  // debugPrint(response.statusCode);
-  // debugPrint(response.body);
-
   Future<String?> validateVendor(String vendorId) async {
     if (paymentapi == null) {
       await initialize();
@@ -396,7 +358,6 @@ class Services {
         final data = json.decode(response.body);
         return data['shopName'];
       } else {
-        // debugPrint('response_code= ${response.statusCode}');
         return null;
       }
     } on SocketException {
