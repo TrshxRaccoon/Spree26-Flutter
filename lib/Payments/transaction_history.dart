@@ -15,6 +15,7 @@ class TransactionHistory extends StatefulWidget {
 
 class _TransactionHistoryState extends State<TransactionHistory> {
   late Future<Map<String, dynamic>> _future;
+  bool _isBlocking = false;
 
   @override
   void initState() {
@@ -31,12 +32,88 @@ class _TransactionHistoryState extends State<TransactionHistory> {
     } catch (_) {}
   }
 
+  Future<void> _onBlockAccountPressed() async {
+    if (_isBlocking) return;
+    final shouldBlock = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Block account?'),
+          content: const Text(
+            'Are you sure you want to block your payments account? This action may prevent further transactions.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              style: FilledButton.styleFrom(backgroundColor: PaymentsUi.error),
+              child: const Text('Block'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldBlock != true || !mounted) return;
+
+    setState(() => _isBlocking = true);
+    try {
+      await Services().blockaccount();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Account blocked successfully.')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+      );
+    } finally {
+      if (mounted) setState(() => _isBlocking = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: PaymentsUi.bg,
-        appBar: PaymentsUi.appBar(context, 'Transaction history'),
+        appBar: PaymentsUi.appBar(
+          context,
+          'Transaction history',
+          actions: [
+            TextButton.icon(
+              onPressed: _isBlocking ? null : _onBlockAccountPressed,
+              icon: _isBlocking
+                  ? SizedBox(
+                      width: 14.r,
+                      height: 14.r,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: PaymentsUi.error,
+                      ),
+                    )
+                  : Icon(
+                      Icons.block,
+                      color: PaymentsUi.error,
+                      size: 18.r,
+                    ),
+              label: Text(
+                'Block Account',
+                style: TextStyle(
+                  color: PaymentsUi.error,
+                  fontFamily: PaymentsUi.font,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12.sp,
+                ),
+              ),
+            ),
+            SizedBox(width: 6.w),
+          ],
+        ),
         body: FutureBuilder<Map<String, dynamic>>(
           future: _future,
           builder: (context, snapshot) {

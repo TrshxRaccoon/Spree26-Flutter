@@ -109,13 +109,18 @@ abstract final class PaymentsUi {
     );
   }
 
-  static AppBar appBar(BuildContext context, String title) {
+  static AppBar appBar(
+    BuildContext context,
+    String title, {
+    List<Widget>? actions,
+  }) {
     return AppBar(
       backgroundColor: bg,
       foregroundColor: textPrimary,
       elevation: 0,
       scrolledUnderElevation: 0,
       surfaceTintColor: Colors.transparent,
+      actions: actions,
       title: Text(
         title,
         style: TextStyle(
