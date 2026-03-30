@@ -38,31 +38,38 @@ class _EntryState extends State<Entry> {
 
   Future<void> _handleLogoutTap() async {
     if (widget.onLogout == null) return;
-    final confirmed = await showDialog<bool>(
+    final action = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: const Color(0xFF171717),
         title: Text(
-          'Logout',
+          'Choose an action',
           style: TextStyle(color: Colors.white, fontSize: 20.sp),
         ),
         content: Text(
-          'Are you sure you want to logout?',
+          'Do you want to logout or delete account? Both will sign you out for now.',
           style: TextStyle(color: Colors.white70, fontSize: 14.sp),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
+            onPressed: () => Navigator.of(ctx).pop(),
             child: Text('Cancel', style: TextStyle(color: Colors.grey)),
           ),
           TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
+            onPressed: () => Navigator.of(ctx).pop('logout'),
             child: Text('Logout', style: TextStyle(color: Color(0xFFFF3355))),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop('delete'),
+            child: Text(
+              'Delete Account',
+              style: TextStyle(color: Color(0xFFFF3355)),
+            ),
           ),
         ],
       ),
     );
-    if (confirmed != true || !mounted) return;
+    if ((action != 'logout' && action != 'delete') || !mounted) return;
     setState(() => _isLoggingOut = true);
     try {
       await widget.onLogout!.call();

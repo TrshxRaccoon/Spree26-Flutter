@@ -153,6 +153,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _handleLogout() async {
+    try {
+      await Services().logout();
+    } catch (_) {
+      // Always continue with local sign-out so the user can exit the session.
+    }
     await _clearStoredData();
     if (mounted) {
       setState(() {

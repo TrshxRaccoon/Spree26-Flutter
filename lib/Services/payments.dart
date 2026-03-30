@@ -240,6 +240,49 @@ class Services {
     }
   }
 
+  Future<void> logout() async {
+    if (paymentapi == null) {
+      await initialize();
+    }
+
+    try {
+      final token = await _storage.read(key: 'access_token');
+      final endpoints = <String>[
+        '$paymentapi/logout/student',
+        '$paymentapi/student/logout',
+      ];
+
+      Object? lastError;
+      for (final endpoint in endpoints) {
+        final response = await http.post(
+          Uri.parse(endpoint),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+          },
+        );
+
+        if (response.statusCode == 200 ||
+            response.statusCode == 201 ||
+            response.statusCode == 204) {
+          return;
+        }
+
+        // Try fallback route if first route is not present.
+        if (response.statusCode == 404) continue;
+        lastError = Exception('Logout failed with status ${response.statusCode}');
+        break;
+      }
+
+      if (lastError != null) throw lastError;
+      throw Exception('Failed to logout');
+    } on SocketException {
+      throw Exception('Kindly check your network connection.');
+    } catch (e) {
+      throw Exception('Failed to logout: $e');
+    }
+  }
+
   Future<Map<String, dynamic>> transactions() async {
     if (paymentapi == null) {
       await initialize();
