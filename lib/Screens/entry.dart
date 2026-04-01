@@ -47,7 +47,7 @@ class _EntryState extends State<Entry> {
           style: TextStyle(color: Colors.white, fontSize: 20.sp),
         ),
         content: Text(
-          'Do you want to logout or delete account? Both will sign you out for now.',
+          'Do you want to logout or delete account?',
           style: TextStyle(color: Colors.white70, fontSize: 14.sp),
         ),
         actions: [
